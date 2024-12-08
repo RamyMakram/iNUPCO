@@ -1,4 +1,5 @@
 ﻿using iNUPCO.PO.Data.Models;
+using iNUPCO.PO.DTOs.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace iNUPCO.PO.Service.GoodService
 {
     public interface IGoodService
     {
-        IEnumerable<Good> GetGoods();
+        IEnumerable<GoodDTO> GetGoods();
     }
 }

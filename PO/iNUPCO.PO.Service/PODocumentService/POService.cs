@@ -1,6 +1,8 @@
 ﻿using iNUPCO.PO.Data.Models;
+using iNUPCO.PO.DTOs.DTOs;
 using iNUPCO.PO.DTOs.Global;
 using iNUPCO.PO.Repo;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,19 +18,21 @@ namespace iNUPCO.PO.Service.PODocumentService
         )
         : IPOService
     {
-        public IEnumerable<Podocument> GetPOs(PagginationDTO pagginationDTO)
+        public IEnumerable<PODocumentDTO> GetPOs(PagginationDTO pagginationDTO)
         {
-            return poRepository.GetAll_Pagging(q => true, pagginationDTO, out int _, new string[] { "PodocumentItems.GoodCodeNavigation" });
+            return poRepository.GetAll_Pagging(q => true, pagginationDTO, out int _, new string[] { "PodocumentItems.GoodCodeNavigation" }).Adapt<List<PODocumentDTO>>();
         }
 
-        public Podocument GetPO(long PoNumber)
+        public PODocumentDTO GetPO(long PoNumber)
         {
-            return poRepository.Get(q => q.PoNumber == PoNumber, new string[] { "PodocumentItems.GoodCodeNavigation" });
+            return poRepository.Get(q => q.PoNumber == PoNumber, new string[] { "PodocumentItems.GoodCodeNavigation" }).Adapt<PODocumentDTO>();
         }
 
-        public void InsertPO(Podocument PO)
+        public void InsertPO(PODocumentDTO _PODTO)
         {
             //PO.PoTotalAmount = PO.PodocumentItems;
+            var PO = _PODTO.Adapt<Podocument>();
+
             if (PO == null)
                 throw new ArgumentNullException("PO Is Null");
 

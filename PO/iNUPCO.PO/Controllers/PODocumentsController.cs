@@ -11,14 +11,14 @@ namespace iNUPCO.PO.Controllers
     public class PODocumentsController(IPOService poService) : ControllerBase
     {
         /// <summary>
-        /// Return All Goods to Create PO
+        /// Return All PODocuments
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Get(PagginationDTO pagginationDTO)
         {
-            var Goods = poService.GetPOs();
-            return Ok(new ResponseSchema(IsSuccess: true, Data: Goods, StatusCode: 200));
+            var podocuments = poService.GetPOs(pagginationDTO);
+            return Ok(new ResponseSchema(IsSuccess: true, Data: podocuments, StatusCode: 200));
         }
     }
 }

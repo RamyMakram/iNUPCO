@@ -1,5 +1,8 @@
+using iNUPCO.PO;
+
 var builder = WebApplication.CreateBuilder(args);
 
+new MapsterProfiler();
 // Add services to the container.
 
 builder.Services.AddControllers();

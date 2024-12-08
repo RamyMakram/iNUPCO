@@ -1,5 +1,7 @@
 ﻿using iNUPCO.PO.Data.Models;
+using iNUPCO.PO.DTOs.DTOs;
 using iNUPCO.PO.Repo;
+using Mapster;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +16,9 @@ namespace iNUPCO.PO.Service.GoodService
         )
         : IGoodService
     {
-        public IEnumerable<Good> GetGoods()
+        public IEnumerable<GoodDTO> GetGoods()
         {
-            return goodRepository.GetAll();
+            return goodRepository.GetAll().Adapt<List<GoodDTO>>();
         }
     }
 }
