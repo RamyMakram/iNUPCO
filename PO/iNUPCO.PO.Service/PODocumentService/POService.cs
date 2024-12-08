@@ -51,5 +51,18 @@ namespace iNUPCO.PO.Service.PODocumentService
             poRepository.Insert(PO);
             poRepository.SaveChanges();
         }
+        public void ChangeState(int PoNumber)
+        {
+            var poDoc = poRepository.Get(q => q.PoNumber == PoNumber, new string[] { "PodocumentItems.GoodCodeNavigation" });
+            
+            if (poDoc == null)
+                throw new ArgumentNullException();
+            
+            poDoc.PoState = 1;
+            poRepository.Update(poDoc);
+            poRepository.SaveChanges();
+
+        }
+
     }
 }

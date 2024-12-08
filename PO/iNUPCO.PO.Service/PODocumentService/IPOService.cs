@@ -14,5 +14,6 @@ namespace iNUPCO.PO.Service.PODocumentService
         IEnumerable<PODocumentDTO> GetPOs(PagginationDTO pagginationDTO);
         PODocumentDTO GetPO(long id);
         void InsertPO(PODocumentDTO PO);
+        void ChangeState(int poID);
     }
 }

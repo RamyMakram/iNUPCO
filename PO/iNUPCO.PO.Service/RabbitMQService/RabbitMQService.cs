@@ -1,5 +1,7 @@
 ﻿using iNUPCO.PO.DTOs.Global;
+using iNUPCO.PO.Service.PODocumentService;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
@@ -21,8 +23,9 @@ namespace iNUPCO.PO.Service.RabbitMQService
         private readonly ConnectionFactory _connectionFactory;
         private IConnection connection;
         private IChannel channel;
+        private readonly IServiceProvider _serviceProvider;
 
-        public RabbitMQService(IOptions<RabbitMQSettings> options)
+        public RabbitMQService(IOptions<RabbitMQSettings> options, IServiceProvider serviceProvider)
         {
             var settings = options.Value;
 
@@ -37,6 +40,7 @@ namespace iNUPCO.PO.Service.RabbitMQService
                 Password = settings.Password,
                 Port = 5672
             };
+            _serviceProvider = serviceProvider;
         }
         protected override async Task<Task> ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -59,6 +63,13 @@ namespace iNUPCO.PO.Service.RabbitMQService
                     var message = Encoding.UTF8.GetString(body);
                     Console.WriteLine($"Received: {message}");
                     // Acknowledge the message
+                    int.TryParse(message, out int POID);
+                    using (var scope = _serviceProvider.CreateScope())
+                    {
+                        var poService = scope.ServiceProvider.GetRequiredService<IPOService>();
+                        poService.ChangeState(POID);
+                    }
+
                     await channel.BasicAckAsync(deliveryTag: eventArgs.DeliveryTag, multiple: false);
 
                 };
