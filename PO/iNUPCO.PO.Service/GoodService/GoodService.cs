@@ -12,7 +12,7 @@ namespace iNUPCO.PO.Service.GoodService
 {
     public class GoodService
         (
-            Repository<Good> goodRepository
+            IRepository<Good> goodRepository
         )
         : IGoodService
     {
