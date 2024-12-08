@@ -1,4 +1,5 @@
 ﻿using iNUPCO.PO.Service.GoodService;
+using iNUPCO.PO.Service.RabbitMQService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

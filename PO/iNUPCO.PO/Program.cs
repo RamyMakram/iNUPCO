@@ -7,8 +7,11 @@ using System.Threading.RateLimiting;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using iNUPCO.PO.DTOs.Global;
+using iNUPCO.PO.Service.RabbitMQService;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHostedService<RabbitMQService>();
 
 new MapsterProfiler();
 // Add services to the container.
@@ -41,6 +44,7 @@ builder.Services.AddDbContext<iNUPCOContext>(options =>
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 //Register Services From iNUPCO.PO.Service
 builder.Services.AddInfrastructureServices();
 

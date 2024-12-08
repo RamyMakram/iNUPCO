@@ -1,0 +1,40 @@
+services:  
+  # RabbitMQ Service
+  rabbitmq:
+    image: rabbitmq:management  # Use RabbitMQ with management plugin
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ messaging port
+      - "15672:15672" # RabbitMQ management console port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest  # Default username
+      RABBITMQ_DEFAULT_PASS: guest  # Default password
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq  # Persist RabbitMQ data (optional)
+    networks:
+        - rabbitmq_go_net
+
+ 
+
+
+  inupco.po:
+    image: ${DOCKER_REGISTRY-}inupcopo
+    build:
+      context: .
+      dockerfile: PO/iNUPCO.PO/Dockerfile
+    depends_on: 
+      - rabbitmq
+    networks:
+        - rabbitmq_go_net
+    environment:
+      RABBITMQ__HostName: rabbitmq  # RabbitMQ container hostname
+      RABBITMQ__UserName: guest  # Default RabbitMQ username
+      RABBITMQ__Password: guest  # Default RabbitMQ password
+    
+
+volumes:
+  rabbitmq-data:  # Volume for persisting RabbitMQ data
+networks:
+  rabbitmq_go_net:
+    name: rabbitmq_go_net
+    driver: bridge
