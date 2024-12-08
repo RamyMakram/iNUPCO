@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace iNUPCO.PO.DTOs.Global
 {
-    public record ResponseSchema(bool IsSuccess, object Data, int StatusCode, string? ErrorMessage = null);
+    public record ResponseSchema(bool IsSuccess, int StatusCode, object Data = null, string? ErrorMessage = null);
 }

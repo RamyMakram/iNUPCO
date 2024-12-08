@@ -38,6 +38,8 @@ namespace iNUPCO.PO.Service.PODocumentService
 
             if (PO.PodocumentItems.Count == 0)
                 throw new ArgumentNullException("PO Items Is Null");
+            if (PO.PodocumentItems.GroupBy(q => q.GoodCode).Any(q => q.Count() > 1))
+                throw new InvalidOperationException("Good Cannot Duplicated");
 
             PO.PoDate = DateTime.Now;
 

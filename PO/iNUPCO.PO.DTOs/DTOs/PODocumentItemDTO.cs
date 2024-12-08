@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace iNUPCO.PO.DTOs.DTOs
 {
-    public record PODocumentItemDTO(GoodDTO Good,int SerialNumber,decimal PurchasedGoodPrice);
+    public record PODocumentItemDTO(GoodDTO Good,int GoodCode,int SerialNumber,decimal PurchasedGoodPrice);
 }
