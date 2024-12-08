@@ -1,0 +1,234 @@
+USE [master]
+GO
+/****** Object:  Database [iNUPCO]    Script Date: 12/8/2024 6:26:46 PM ******/
+CREATE DATABASE [iNUPCO];
+GO
+ALTER DATABASE [iNUPCO] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [iNUPCO].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [iNUPCO] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [iNUPCO] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [iNUPCO] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [iNUPCO] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [iNUPCO] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [iNUPCO] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [iNUPCO] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [iNUPCO] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [iNUPCO] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [iNUPCO] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [iNUPCO] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [iNUPCO] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [iNUPCO] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [iNUPCO] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [iNUPCO] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [iNUPCO] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [iNUPCO] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [iNUPCO] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [iNUPCO] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [iNUPCO] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [iNUPCO] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [iNUPCO] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [iNUPCO] SET RECOVERY FULL 
+GO
+ALTER DATABASE [iNUPCO] SET  MULTI_USER 
+GO
+ALTER DATABASE [iNUPCO] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [iNUPCO] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [iNUPCO] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [iNUPCO] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [iNUPCO] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [iNUPCO] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'iNUPCO', N'ON'
+GO
+ALTER DATABASE [iNUPCO] SET QUERY_STORE = OFF
+GO
+USE [iNUPCO]
+GO
+/****** Object:  User [wa]    Script Date: 12/8/2024 6:26:46 PM ******/
+CREATE USER [wa] FOR LOGIN [wa] WITH DEFAULT_SCHEMA=[dbo]
+GO
+/****** Object:  User [sa1]    Script Date: 12/8/2024 6:26:46 PM ******/
+CREATE USER [sa1] FOR LOGIN [sa1] WITH DEFAULT_SCHEMA=[dbo]
+GO
+/****** Object:  Table [dbo].[Good]    Script Date: 12/8/2024 6:26:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Good](
+	[Good_Code] [int] IDENTITY(1,1) NOT NULL,
+	[Good_Name] [nvarchar](250) NULL,
+ CONSTRAINT [PK_Good] PRIMARY KEY CLUSTERED 
+(
+	[Good_Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PODocument]    Script Date: 12/8/2024 6:26:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PODocument](
+	[PO_Number] [int] NOT NULL,
+	[PO_Date] [datetime] NOT NULL,
+	[PO_TotalAmount] [decimal](18, 3) NOT NULL,
+	[PO_State] [int] NOT NULL,
+	[PO_IsHolded] [bit] NOT NULL,
+ CONSTRAINT [PK_PODocument] PRIMARY KEY CLUSTERED 
+(
+	[PO_Number] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PODocument_Item]    Script Date: 12/8/2024 6:26:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PODocument_Item](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[PODocument_Number] [int] NOT NULL,
+	[Good_Code] [int] NOT NULL,
+	[SerialNumber] [int] NOT NULL,
+	[PurchasedGoodPrice] [decimal](18, 3) NOT NULL,
+ CONSTRAINT [PK_PODocument_Item] PRIMARY KEY CLUSTERED 
+(
+	[PODocument_Number] ASC,
+	[Good_Code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SHO]    Script Date: 12/8/2024 6:26:46 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SHO](
+	[SHO_Number] [int] NOT NULL,
+	[DeliveryDate] [datetime] NOT NULL,
+	[PalletCount] [int] NOT NULL,
+	[PODocument_Number] [int] NOT NULL,
+ CONSTRAINT [PK_SHO] PRIMARY KEY CLUSTERED 
+(
+	[SHO_Number] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Good] ON 
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (1, N'Product 1')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (2, N'Product 2')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (3, N'Product 3')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (4, N'Product 4')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (5, N'Product 5')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (6, N'Product 6')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (7, N'Product 7')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (8, N'Product 8')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (9, N'Product 9')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (10, N'Product 10')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (11, N'Product 11')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (12, N'Product 12')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (13, N'Product 13')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (14, N'Product 14')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (15, N'Product 15')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (16, N'Product 16')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (17, N'Product 17')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (18, N'Product 18')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (19, N'Product 19')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (20, N'Product 20')
+GO
+INSERT [dbo].[Good] ([Good_Code], [Good_Name]) VALUES (21, N'Product 21')
+GO
+SET IDENTITY_INSERT [dbo].[Good] OFF
+GO
+INSERT [dbo].[PODocument] ([PO_Number], [PO_Date], [PO_TotalAmount], [PO_State], [PO_IsHolded]) VALUES (-337955593, CAST(N'2024-12-08T12:50:39.670' AS DateTime), CAST(120.000 AS Decimal(18, 3)), 0, 1)
+GO
+SET IDENTITY_INSERT [dbo].[PODocument_Item] ON 
+GO
+INSERT [dbo].[PODocument_Item] ([ID], [PODocument_Number], [Good_Code], [SerialNumber], [PurchasedGoodPrice]) VALUES (2, -337955593, 21, 1, CAST(5.000 AS Decimal(18, 3)))
+GO
+SET IDENTITY_INSERT [dbo].[PODocument_Item] OFF
+GO
+/****** Object:  Index [IX_SHO]    Script Date: 12/8/2024 6:26:47 PM ******/
+CREATE NONCLUSTERED INDEX [IX_SHO] ON [dbo].[SHO]
+(
+	[SHO_Number] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[PODocument] ADD  CONSTRAINT [DF_PODocument_PO_Date]  DEFAULT (getdate()) FOR [PO_Date]
+GO
+ALTER TABLE [dbo].[PODocument] ADD  CONSTRAINT [DF_PODocument_PO_State]  DEFAULT ((0)) FOR [PO_State]
+GO
+ALTER TABLE [dbo].[PODocument] ADD  CONSTRAINT [DF_PODocument_PO_IsHolded]  DEFAULT ((0)) FOR [PO_IsHolded]
+GO
+ALTER TABLE [dbo].[PODocument_Item]  WITH CHECK ADD  CONSTRAINT [FK_PODocument_Item_Good] FOREIGN KEY([Good_Code])
+REFERENCES [dbo].[Good] ([Good_Code])
+GO
+ALTER TABLE [dbo].[PODocument_Item] CHECK CONSTRAINT [FK_PODocument_Item_Good]
+GO
+ALTER TABLE [dbo].[PODocument_Item]  WITH CHECK ADD  CONSTRAINT [FK_PODocument_Item_PODocument] FOREIGN KEY([PODocument_Number])
+REFERENCES [dbo].[PODocument] ([PO_Number])
+GO
+ALTER TABLE [dbo].[PODocument_Item] CHECK CONSTRAINT [FK_PODocument_Item_PODocument]
+GO
+ALTER TABLE [dbo].[SHO]  WITH CHECK ADD  CONSTRAINT [FK_SHO_PODocument] FOREIGN KEY([PODocument_Number])
+REFERENCES [dbo].[PODocument] ([PO_Number])
+GO
+ALTER TABLE [dbo].[SHO] CHECK CONSTRAINT [FK_SHO_PODocument]
+GO
+USE [master]
+GO
+ALTER DATABASE [iNUPCO] SET  READ_WRITE 
+GO

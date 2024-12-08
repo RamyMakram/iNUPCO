@@ -37,7 +37,7 @@ builder.Services.AddRateLimiter(options =>
 
 // Add services to the container.
 // Replace "YourConnectionString" with your actual SQL Server connection string.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection2")
                        ?? "Server=RAMY-MAKRAM;Database=iNUPCO;TrustServerCertificate=True;User ID=wa;Password=1";
 builder.Services.AddDbContext<iNUPCOContext>(options =>
     options.UseSqlServer(connectionString));

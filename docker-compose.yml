@@ -1,4 +1,15 @@
 services:  
+  db:
+     container_name: DB
+     build: PO/iNUPCO.PO/Db
+     ports:
+        - "1432:1433"
+     networks:
+        - rabbitmq_go_net
+     volumes:
+      - sql_data:/var/opt/mssql  
+     restart: unless-stopped               # Restart policy in case of failure
+
   # RabbitMQ Service
   rabbitmq:
     image: rabbitmq:management  # Use RabbitMQ with management plugin
@@ -34,6 +45,7 @@ services:
 
 volumes:
   rabbitmq-data:  # Volume for persisting RabbitMQ data
+  sql_data:
 networks:
   rabbitmq_go_net:
     name: rabbitmq_go_net
